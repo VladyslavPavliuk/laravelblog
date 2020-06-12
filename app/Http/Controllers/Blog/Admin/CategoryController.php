@@ -2,12 +2,28 @@
 
 namespace App\Http\Controllers\Blog\Admin;
 
+use App\Http\Requests\BlogCategoryCreateRequest;
 use App\Http\Requests\BlogCategoryUpdateRequest;
 use App\Models\BlogCategory;
-use Illuminate\Http\Request;
+use App\Repositories\BlogCategoryRepository;
+use Illuminate\Support\Str;
+
 
 class CategoryController extends BaseController
 {
+    /**
+     * @var BlogCategoryRepository
+     */
+
+    private $blogCategoryRepository;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->blogCategoryRepository = app(BlogCategoryRepository::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +31,7 @@ class CategoryController extends BaseController
      */
     public function index()
     {
-        $paginator = BlogCategory::paginate(5);
+        $paginator = $this->blogCategoryRepository->getAllWithPaginate(5);
 
         return view('blog.admin.categories.index', compact('paginator'));
     }
@@ -27,7 +43,11 @@ class CategoryController extends BaseController
      */
     public function create()
     {
-        dd(__METHOD__);
+        $item = new BlogCategory();
+
+        $categoryList = $this->blogCategoryRepository->getForComboBox();
+
+        return view('blog.admin.categories.edit', compact('item', 'categoryList'));
     }
 
     /**
@@ -36,22 +56,47 @@ class CategoryController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BlogCategoryCreateRequest $request)
     {
-        dd(__METHOD__);
+
+       $data = $request->input();
+        if (empty($data['slug'])) {
+            $data['slug'] = Str::slug($data['title']);}
+
+            //Create object and will add in DB
+
+            $item = (new BlogCategory())->create($data);
+
+            if ($item) {
+                return redirect()->route('blog.admin.categories.edit', [$item->id])
+                    ->with(['success' => 'Successfully saved']);
+            } else {
+                return back()->withErrors(['msg' => 'Saving error'])
+                    ->withInput();
+            }
+
+
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
+     *
+     * @param BlogCategoryRepository $categotyRepository
+     *
      * @return \Illuminate\Http\Response
      */
 
-    public function edit($id)
+    public function edit($id, BlogCategoryRepository $categoryRepository)
     {
-        $item = BlogCategory::findorFail($id);
-        $categoryList = BlogCategory::all();
+        $item = $this->blogCategoryRepository->getEdit($id);
+        if(empty($item)){
+            abort(404);
+        }
+
+        $categoryList =
+            $this->blogCategoryRepository->getForComboBox($item->parent_id);
 
         return view('blog.admin.categories.edit', compact('item', 'categoryList'));
     }
@@ -66,7 +111,8 @@ class CategoryController extends BaseController
     public function update(BlogCategoryUpdateRequest $request, $id)
     {
 
-        $item = BlogCategory::find($id);
+        $item = $this->blogCategoryRepository->getEdit($id);
+
         if(empty($item)){
             return back()
                 ->withErrors(['msg' => "Post id=[{$id}] is not found"])
@@ -74,7 +120,11 @@ class CategoryController extends BaseController
         }
 
         $data = $request->all();
-        $result = $item->fill($data)->save();
+
+        if (empty($data['slug'])) {
+            $data['slug'] = Str::slug($data['title']);}
+
+        $result = $item->update($data);
 
         if($result){
             return redirect()
@@ -82,19 +132,9 @@ class CategoryController extends BaseController
                 ->with(['success' => 'Is successfully saved']);
         }else{
             return back()
-                ->withErrors(['msg' => 'Save error'])
+                ->withErrors(['msg' => 'Saving error'])
                 ->withInput();
         }
     }
-
-    public function getWord($text){
-        if($text == 'a'){
-                      
-        }
-    }
-
-    $text = 'Lorem ipsium...';
-
-
 
 }
