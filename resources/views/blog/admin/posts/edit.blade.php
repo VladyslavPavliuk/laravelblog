@@ -4,7 +4,7 @@
     @php /**@var \App\Models\BlogPost @item */ @endphp
 
     <div class="container">
-        @include('blog.blog.admin.posts.includes.result_messages')
+        @include('blog.admin.posts.includes.result_messages')
 
         @if($item->exist)
             <form method="POST" action="{{route('blog.admin.posts.update')}}">
