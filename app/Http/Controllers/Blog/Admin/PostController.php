@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Blog\Admin;
 
 use App\Repositories\BlogCategoryRepository;
 use App\Repositories\BlogPostRepository;
+use App\Http\Requests\BlogPostUpdateRequest;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use function React\Promise\all;
+
 
 /**
  * Controlling post's of blog
@@ -105,10 +108,40 @@ class PostController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(BlogPostUpdateRequest $request, $id)
     {
-        dd(__METHOD__,$request->all(), $id);
-    }
+      $item = $this->blogPostRepository->getEdit($id);
+
+      if (empty($item))
+      {
+          return back()
+              ->withErrors(['msg' => "Post id=[{$id}] not found"])
+              ->withInput();}
+
+          $data = $request->all();
+//
+//            In to observer.
+//
+//          if (empty($data['slug'])) {
+//              $data['slug'] = \Str::slug($data['title']);
+//          }
+//          if (empty($item->published_at) && $data['is_published']){
+//              $data['published_at'] = Carbon::now();
+//          }
+
+          $result = $item->update($data);
+
+          if($result) {
+              return  redirect()
+                  ->route('blog.admin.posts.edit', $item->id)
+                  ->with(['success' => 'Successful saved']);
+          }else{
+              return back()
+                  ->withErrors(['msg' => 'Error saving'])
+                  ->withInput();
+          }
+      }
+
 
     /**
      * Remove the specified resource from storage.

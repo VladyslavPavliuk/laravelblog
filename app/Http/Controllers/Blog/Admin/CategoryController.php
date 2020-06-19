@@ -60,8 +60,10 @@ class CategoryController extends BaseController
     {
 
        $data = $request->input();
-        if (empty($data['slug'])) {
-            $data['slug'] = Str::slug($data['title']);}
+
+//        In to observer
+//        if (empty($data['slug'])) {
+//            $data['slug'] = Str::slug($data['title']);}
 
             //Create object and will add in DB
 
@@ -121,8 +123,9 @@ class CategoryController extends BaseController
 
         $data = $request->all();
 
-        if (empty($data['slug'])) {
-            $data['slug'] = Str::slug($data['title']);}
+//        In to observer
+//        if (empty($data['slug'])) {
+//            $data['slug'] = Str::slug($data['title']);}
 
         $result = $item->update($data);
 

@@ -12,7 +12,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    ID:{{$item->id}}
+                    ID: {{$item->id}}
                 </div>
             </div>
         </div>
