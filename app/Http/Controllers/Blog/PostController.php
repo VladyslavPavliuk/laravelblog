@@ -11,7 +11,7 @@ class PostController extends BaseController
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Illuminate\Http\Response
      */
     public function index()
     {
@@ -22,11 +22,11 @@ class PostController extends BaseController
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response;
      */
     public function create()
     {
-        //
+
     }
 
     /**

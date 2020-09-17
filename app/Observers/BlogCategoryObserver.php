@@ -44,7 +44,7 @@ class BlogCategoryObserver
      */
 
     public function updating(BlogCategory $blogCategory){
-
+        dd(__METHOD__, $blogCategory->getDirty());
         $this->setSlug($blogCategory);
     }
 

@@ -53,29 +53,22 @@ class CategoryController extends BaseController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(BlogCategoryCreateRequest $request)
     {
 
-       $data = $request->input();
+        $data = $request->input();
+        $item = (new BlogCategory())->create($data); //Create object and will add in DB
 
-//        In to observer
-//        if (empty($data['slug'])) {
-//            $data['slug'] = Str::slug($data['title']);}
-
-            //Create object and will add in DB
-
-            $item = (new BlogCategory())->create($data);
-
-            if ($item) {
-                return redirect()->route('blog.admin.categories.edit', [$item->id])
-                    ->with(['success' => 'Successfully saved']);
-            } else {
-                return back()->withErrors(['msg' => 'Saving error'])
-                    ->withInput();
-            }
+        if ($item) {
+            return redirect()->route('blog.admin.categories.edit', [$item->id])
+                ->with(['success' => 'Successfully saved']);
+        } else {
+            return back()->withErrors(['msg' => 'Saving error'])
+                ->withInput();
+        }
 
 
     }
@@ -83,7 +76,7 @@ class CategoryController extends BaseController
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      *
      * @param BlogCategoryRepository $categotyRepository
      *
@@ -93,7 +86,7 @@ class CategoryController extends BaseController
     public function edit($id, BlogCategoryRepository $categoryRepository)
     {
         $item = $this->blogCategoryRepository->getEdit($id);
-        if(empty($item)){
+        if (empty($item)) {
             abort(404);
         }
 
@@ -106,8 +99,8 @@ class CategoryController extends BaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(BlogCategoryUpdateRequest $request, $id)
@@ -115,7 +108,7 @@ class CategoryController extends BaseController
 
         $item = $this->blogCategoryRepository->getEdit($id);
 
-        if(empty($item)){
+        if (empty($item)) {
             return back()
                 ->withErrors(['msg' => "Post id=[{$id}] is not found"])
                 ->withInput();
@@ -123,17 +116,13 @@ class CategoryController extends BaseController
 
         $data = $request->all();
 
-//        In to observer
-//        if (empty($data['slug'])) {
-//            $data['slug'] = Str::slug($data['title']);}
-
         $result = $item->update($data);
 
-        if($result){
+        if ($result) {
             return redirect()
                 ->route('blog.admin.categories.edit', $item->id)
                 ->with(['success' => 'Is successfully saved']);
-        }else{
+        } else {
             return back()
                 ->withErrors(['msg' => 'Saving error'])
                 ->withInput();

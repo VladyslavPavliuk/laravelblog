@@ -8,6 +8,17 @@ use Carbon\Carbon;
 class BlogPostObserver
 {
     /**
+     * Observing before created
+     * @param BlogPost $blogPost
+     */
+    public function creating(BlogPost $blogPost){
+
+        $this->setPublishedAt($blogPost);
+
+        $this->setSlug($blogPost);
+
+    }
+    /**
      * Handle the blog post "created" event.
      *
      * @param  \App\Models\BlogPost  $blogPost
