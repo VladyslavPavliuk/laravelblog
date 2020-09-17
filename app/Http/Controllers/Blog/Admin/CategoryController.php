@@ -8,7 +8,6 @@ use App\Models\BlogCategory;
 use App\Repositories\BlogCategoryRepository;
 use Illuminate\Support\Str;
 
-
 class CategoryController extends BaseController
 {
     /**
@@ -34,6 +33,7 @@ class CategoryController extends BaseController
         $paginator = $this->blogCategoryRepository->getAllWithPaginate(5);
 
         return view('blog.admin.categories.index', compact('paginator'));
+
     }
 
     /**

@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Blog\Admin;
 
+use App\Http\Requests\BlogPostUpdateRequest;
 use App\Repositories\BlogCategoryRepository;
 use App\Repositories\BlogPostRepository;
-use App\Http\Requests\BlogPostUpdateRequest;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use function React\Promise\all;
-
 
 /**
  * Controlling post's of blog
@@ -110,15 +108,15 @@ class PostController extends BaseController
      */
     public function update(BlogPostUpdateRequest $request, $id)
     {
-      $item = $this->blogPostRepository->getEdit($id);
+        $item = $this->blogPostRepository->getEdit($id);
 
-      if (empty($item))
-      {
-          return back()
-              ->withErrors(['msg' => "Post id=[{$id}] not found"])
-              ->withInput();}
+        if (empty($item))
+        {
+            return back()
+                ->withErrors(['msg' => "Post id=[{$id}] not found"])
+                ->withInput();}
 
-          $data = $request->all();
+        $data = $request->all();
 //
 //            In to observer.
 //
@@ -129,18 +127,18 @@ class PostController extends BaseController
 //              $data['published_at'] = Carbon::now();
 //          }
 
-          $result = $item->update($data);
+        $result = $item->update($data);
 
-          if($result) {
-              return  redirect()
-                  ->route('blog.admin.posts.edit', $item->id)
-                  ->with(['success' => 'Successful saved']);
-          }else{
-              return back()
-                  ->withErrors(['msg' => 'Error saving'])
-                  ->withInput();
-          }
-      }
+        if($result) {
+            return  redirect()
+                ->route('blog.admin.posts.edit', $item->id)
+                ->with(['success' => 'Successful saved']);
+        }else{
+            return back()
+                ->withErrors(['msg' => 'Error saving'])
+                ->withInput();
+        }
+    }
 
 
     /**
