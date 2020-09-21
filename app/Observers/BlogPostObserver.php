@@ -17,6 +17,10 @@ class BlogPostObserver
 
         $this->setSlug($blogPost);
 
+        $this->setHtml($blogPost);
+
+        $this->setUser($blogPost);
+
     }
     /**
      * Handle the blog post "created" event.
@@ -36,7 +40,6 @@ class BlogPostObserver
      */
     public function updating(BlogPost $blogPost)
     {
-
 
         $this->setPublishedAt($blogPost);
 
@@ -65,6 +68,16 @@ class BlogPostObserver
      * @param  \App\Models\BlogPost  $blogPost
      * @return void
      */
+    protected function setHtml(BlogPost $blogPost){
+        if ($blogPost->isDirty('content_raw')){
+            //TODO: Here is must be iteration markdown -> html
+            $blogPost->content_html = $blogPost->content_raw;
+        }
+    }
+
+    protected function setUser(BlogPost  $blogPost){
+        $blogPost->user_id = auth()->id() ?? BlogPost::UNKNOWN_USER;
+    }
     public function updated(BlogPost $blogPost)
     {
         //
