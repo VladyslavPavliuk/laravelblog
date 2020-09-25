@@ -36,8 +36,28 @@ class BlogCategory extends Model
 //                : '???');
 //        return $title;
 //    }
-//
-//    public function isRoot(){
-//        return $this->id === BlogCategory::ROOT;
-//    }
+
+
+    public function isRoot(){
+        return $this->id === BlogCategory::ROOT;
+    }
+
+    /**
+     * @param string $valueFromDB*
+     *
+     * @return bool|mixed|null|string|string[]
+     */
+    public function getTitleAttribute($valueFromobject)
+    {
+        return mb_strtoupper($valueFromobject);
+    }
+
+    /**
+     * @param string $incomingValue
+     */
+
+    public function setTitleAttributte(string $incomingValue)
+    {
+        $this->attributes['title'] = mb_strtolower($incomingValue);
+    }
 }
