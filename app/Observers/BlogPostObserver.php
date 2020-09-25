@@ -78,9 +78,15 @@ class BlogPostObserver
     protected function setUser(BlogPost  $blogPost){
         $blogPost->user_id = auth()->id() ?? BlogPost::UNKNOWN_USER;
     }
+
     public function updated(BlogPost $blogPost)
     {
         //
+    }
+
+    public function deleting(BlogPost $blogPost)
+    {
+        //return false;
     }
 
     /**
@@ -89,6 +95,7 @@ class BlogPostObserver
      * @param  \App\Models\BlogPost  $blogPost
      * @return void
      */
+
     public function deleted(BlogPost $blogPost)
     {
         //

@@ -130,15 +130,6 @@ class PostController extends BaseController
                 ->withInput();}
 
         $data = $request->all();
-//
-//            In to observer.
-//
-//          if (empty($data['slug'])) {
-//              $data['slug'] = \Str::slug($data['title']);
-//          }
-//          if (empty($item->published_at) && $data['is_published']){
-//              $data['published_at'] = Carbon::now();
-//          }
 
         $result = $item->update($data);
 
@@ -158,10 +149,22 @@ class PostController extends BaseController
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
-        dd(__METHOD__, $id);
+        //SoftDelete
+        $result = BlogPost::destroy($id);
+
+        //Full delete from DB
+        //$result = BlogPost::find($id)->forceDelete();
+
+        if ($result){
+            return redirect()
+                ->route('blog.admin.posts.index')
+                ->with(['success' => "Post id [$id] deleted"]);
+        }else{
+            return back()->withErrors(['msg' => 'Error deteting']);
+        }
     }
 }
