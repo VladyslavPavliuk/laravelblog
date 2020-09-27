@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\BlogPost;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -12,14 +13,15 @@ class BlogPostAfterCreateJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    private $blogPost;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(BlogPost $blogPost)
     {
-        //
+        $this->blogPost = $blogPost;
     }
 
     /**
@@ -29,6 +31,6 @@ class BlogPostAfterCreateJob implements ShouldQueue
      */
     public function handle()
     {
-        //
+        logs()->info("Created new post in blog {$this->blogPost->id}");
     }
 }
