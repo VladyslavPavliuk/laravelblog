@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\BlogPost;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
-use stdClass;
+
 
 class DiggingDeeperController extends Controller
 {
@@ -19,16 +18,17 @@ class DiggingDeeperController extends Controller
 
     public function collections()
     {
-//        $result = [];
 
-        /**
-         * @var Collection $eloquentCollection
-         */
-        $eloquentCollection = BlogPost::withTrashed()->get();
-        /**
-         * @var \Illuminate\Support\Collection $collection
-         */
-        $collection = collect($eloquentCollection->toArray());
+//        /**
+//         * @var Collection $eloquentCollection
+//         */
+//        $eloquentCollection = BlogPost::withTrashed()->get();
+//        /**
+//         * @var \Illuminate\Support\Collection $collection
+//         */
+//        $collection = collect($eloquentCollection->toArray());
+
+//        $result = [];
 
 //        $result['first'] = $collection->first();
 //        $result['last'] = $collection->last();
@@ -56,15 +56,39 @@ class DiggingDeeperController extends Controller
 //        });
 
         // If you want to transform the original collection, use the transform method
-        $collection->transform(function (array $item){
-           $newItem = new stdClass();
-           $newItem->item_id = $item['id'];
-            $newItem->item_name = $item['title'];
-            $newItem->exists = is_null($item['deleted_at']);
-            $newItem->created_at = Carbon::parse($item['created_at']);
-            return $newItem;
-        });
+//        $collection->transform(function (array $item) {
+//            $newItem = new stdClass();
+//            $newItem->item_id = $item['id'];
+//            $newItem->item_name = $item['title'];
+//            $newItem->exists = is_null($item['deleted_at']);
+//            $newItem->created_at = Carbon::parse($item['created_at']);
+//            return $newItem;
+//        });
 
-        dd($collection);
+//        $newItem1 = new \StdClass();
+//        $newItem1->id = 34;
+//
+//        $newItem2 = new \StdClass();
+//        $newItem2->id = 35;
+//
+//        // Put element in thhend of collection
+//        $newItemFirst = $collection->prepend($newItem1)->first();
+//        $newItemLast = $collection->push($newItem2)->last();
+//        $pulledItem = $collection->pull(1);
+
+        // Filter instead of orWhere();
+//        $filtred = $collection->filter(function ($item) {
+//            $byDay = $item->created_at->isFriday();
+//            $byDate = $item->created_at->day == 13;
+//            $result = $byDate && $byDay;
+//
+//            return $result;
+//        });
+//        }
+//    }
+//        $sortSimpleCollection = collect([4, 23, 1, 32 , 7])->sort()->values();
+//        $sortAscCollection = $collection->sortBy('created_at');
+//        $sortDescCollection = $collection->sortByDesc('item_id');
+//        dd(compact('sortSimpleCollection', 'sortAscCollection', 'sortDescCollection'));
     }
 }

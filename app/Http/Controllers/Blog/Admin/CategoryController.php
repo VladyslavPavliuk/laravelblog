@@ -6,7 +6,6 @@ use App\Http\Requests\BlogCategoryCreateRequest;
 use App\Http\Requests\BlogCategoryUpdateRequest;
 use App\Models\BlogCategory;
 use App\Repositories\BlogCategoryRepository;
-use Illuminate\Support\Str;
 
 class CategoryController extends BaseController
 {
@@ -26,7 +25,10 @@ class CategoryController extends BaseController
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|
+     * @return \Illuminate\Contracts\View\Factory|
+     * @return \Illuminate\Http\Response|
+     * @return \Illuminate\View\View
      */
     public function index()
     {
@@ -39,7 +41,10 @@ class CategoryController extends BaseController
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|
+     * @return \Illuminate\Contracts\View\Factory|
+     * @return \Illuminate\Http\Response|
+     * @return \Illuminate\View\View
      */
     public function create()
     {
@@ -54,7 +59,7 @@ class CategoryController extends BaseController
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(BlogCategoryCreateRequest $request)
     {
@@ -80,28 +85,26 @@ class CategoryController extends BaseController
      *
      * @param BlogCategoryRepository $categotyRepository
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application
+     * @return \Illuminate\Contracts\View\Factory|
+     * @return \Illuminate\Http\Response|\Illuminate\View\View
      */
 
     public function edit($id)
     {
         $item = $this->blogCategoryRepository->getEdit($id);
-
-        $v['title_before'] = $item->title;
-
-        $item->title = 'ASDasdasdaSD asdasd 1212';
-
-        $v['title_after'] = $item->title;
-        $v['getAttribute'] = $item->getAttribute('title');
-        $v['attributesToArray'] = $item->attributesToArray();
+//        $v['title_before'] = $item->title;
+//
+//        $item->title = 'ASDasdasdaSD asdasd 1212';
+//
+//        $v['title_after'] = $item->title;
+//        $v['getAttribute'] = $item->getAttribute('title');
+//        $v['attributesToArray'] = $item->attributesToArray();
 //        $v['attributes'] = $item->attribtes['title'];
-        $v['getAttributeValue'] = $item->getAttributeValue('title');
-        $v['getMutatedAttributes'] = $item->getMutatedAttributes();
-        $v['hasGetMutator for title'] = $item->hasGetMutator('title');
-        $v['toArray'] = $item->toArray();
-
-        dd($v, $item);
-
+//        $v['getAttributeValue'] = $item->getAttributeValue('title');
+//        $v['getMutatedAttributes'] = $item->getMutatedAttributes();
+//        $v['hasGetMutator for title'] = $item->hasGetMutator('title');
+//        $v['toArray'] = $item->toArray();
         if (empty($item)){
             abort(404);
         }
@@ -117,7 +120,7 @@ class CategoryController extends BaseController
      *
      * @param \Illuminate\Http\Request $request
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(BlogCategoryUpdateRequest $request, $id)
     {

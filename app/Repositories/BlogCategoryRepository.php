@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\BlogCategory as Model;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class BlogCategoryRepository.
@@ -39,7 +40,7 @@ class BlogCategoryRepository extends CoreRepository
      * @return Collection
      *
      */
-    public function getForComboBox()
+    public function getForComboBox($id)
     {
         $columns = implode(', ',[
             'id',
