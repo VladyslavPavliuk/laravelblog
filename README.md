@@ -13,7 +13,7 @@ functionality rather than appearance.**
 
 2. **Delete all tables**.
 
-3. **Migrate database** (_php artisan migrate_).
+3. **Migrate database and seeds** (_php artisan migrate:refresh --seed_).
 
 
 
