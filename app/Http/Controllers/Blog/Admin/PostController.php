@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Blog\Admin;
 
 use App\Http\Requests\BlogPostCreateRequest;
 use App\Http\Requests\BlogPostUpdateRequest;
+use App\Jobs\BlogPostAfterCreateJob;
 use App\Models\BlogPost;
 use App\Repositories\BlogCategoryRepository;
 use App\Repositories\BlogPostRepository;
-use Illuminate\Http\Request;
-use function React\Promise\all;
 
 /**
  * Controlling post's of blog
@@ -40,7 +39,10 @@ class PostController extends BaseController
     /**
      * Display a listing of the resource.
      *
+     * @return \Illuminate\Contracts\Foundation\Application
+     * @return \Illuminate\Contracts\View\Factory
      * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function index()
     {
@@ -52,13 +54,16 @@ class PostController extends BaseController
     /**
      * Show the form for creating a new resource.
      *
+     * @return \Illuminate\Contracts\Foundation\Application
+     * @return \Illuminate\Contracts\View\Factory
      * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function create()
     {
         $item = new BlogPost();
 
-        $categoryList = $this->blogCategoryRepository->getForComboBox();
+        $categoryList = $this->blogCategoryRepository->getForComboBox($item->id);
 
         return view('blog.admin.posts.edit', compact('item', 'categoryList'));    }
 
@@ -66,7 +71,7 @@ class PostController extends BaseController
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(BlogPostCreateRequest $request)
     {
@@ -74,7 +79,11 @@ class PostController extends BaseController
         $item = (new BlogPost())->create($data);
 
         if ($item){
-            return redirect()->route('blog.admin.posts.edit', [$item->id]);
+            $job = new BlogPostAfterCreateJob($item);
+            $this->dispatch($job);
+            return redirect()->route('blog.admin.posts.edit', [$item->id])
+                             ->with(['success' => 'Successfuly saved']);
+
         }else{
             return back()->withErrors(['msg' => 'Error saving'])
                          ->withInput();
@@ -96,7 +105,9 @@ class PostController extends BaseController
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|
+     * @return \Illuminate\Contracts\View\Factory|
+     * @return \Illuminate\Http\Response|\Illuminate\View\View
      */
     public function edit($id)
     {
@@ -107,7 +118,7 @@ class PostController extends BaseController
         }
 
         $categoryList =
-            $this->blogCategoryRepository->getForComboBox();
+            $this->blogCategoryRepository->getForComboBox($item);
 
         return view('blog.admin.posts.edit', compact('item', 'categoryList'));
     }
@@ -117,7 +128,7 @@ class PostController extends BaseController
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(BlogPostUpdateRequest $request, $id)
     {
