@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\BlogPost;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -30,6 +31,6 @@ class BlogPostAfterDeleteJob implements ShouldQueue
      */
     public function handle()
     {
-        logs()->warning("Post is was deleted {$this->blogPostId->id}");
+        logs()->warning("Post is was deleted {$this->blogPostId}");
     }
 }

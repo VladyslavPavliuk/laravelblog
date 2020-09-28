@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Blog\Admin;
 use App\Http\Requests\BlogPostCreateRequest;
 use App\Http\Requests\BlogPostUpdateRequest;
 use App\Jobs\BlogPostAfterCreateJob;
+use App\Jobs\BlogPostAfterDeleteJob;
 use App\Models\BlogPost;
 use App\Repositories\BlogCategoryRepository;
 use App\Repositories\BlogPostRepository;
@@ -82,7 +83,7 @@ class PostController extends BaseController
             $job = new BlogPostAfterCreateJob($item);
             $this->dispatch($job);
             return redirect()->route('blog.admin.posts.edit', [$item->id])
-                             ->with(['success' => 'Successfuly saved']);
+                             ->with(['success' => 'Successful saved']);
 
         }else{
             return back()->withErrors(['msg' => 'Error saving'])
@@ -171,6 +172,9 @@ class PostController extends BaseController
         //$result = BlogPost::find($id)->forceDelete();
 
         if ($result){
+
+            BlogPostAfterDeleteJob::dispatch($id)->delay(10);
+
             return redirect()
                 ->route('blog.admin.posts.index')
                 ->with(['success' => "Post id [$id] deleted"]);
