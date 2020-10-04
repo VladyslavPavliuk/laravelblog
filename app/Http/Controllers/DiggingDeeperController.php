@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ProcessVideoJob;
 use App\Models\BlogPost;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -90,5 +91,22 @@ class DiggingDeeperController extends Controller
 //        $sortAscCollection = $collection->sortBy('created_at');
 //        $sortDescCollection = $collection->sortByDesc('item_id');
 //        dd(compact('sortSimpleCollection', 'sortAscCollection', 'sortDescCollection'));
+    }
+
+    public function processVideo()
+    {
+        ProcessVideoJob::dispatch()
+            // Postpone the execution of the task from the moment it is placed in the queue
+            // Does not affect the pause between attempts to complete the task.
+        // ->delay(10)
+            // ->onQueue('name_of_queue')
+        ;
+    }
+    /**
+     * php artisan queue:listen --queue=generate-catalog --tries=3 --delay=10
+     */
+    public function  prepareCatalog()
+    {
+        GenerateCatalogMainJob::dispatch();
     }
 }

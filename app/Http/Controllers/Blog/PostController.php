@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class PostController extends BaseController
 {
+
     /**
      * Display a listing of the resource.
      *
