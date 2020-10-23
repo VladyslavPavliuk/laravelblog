@@ -9,11 +9,13 @@ functionality rather than appearance.**
 
 # How to work with project:
 
-1. **Import dump** (_Dump file - poligon.sql_). 
+1. **Run _composer install_**.
 
-2. **Delete all tables**.
+2. **Confirurate .env file** (_Select your database name, host, username, password_). 
 
 3. **Migrate database and seeds** (_php artisan migrate:refresh --seed_).
+
+4. **Go to your local server or run _php artisan serve_ and enjoy!**
 
 
 
