@@ -11,7 +11,9 @@ functionality rather than appearance.**
 
 1. **Run _composer install_**.
 
-2. **Confirurate .env file** (_Select your database name, host, username, password_). 
+2. **Duplicate .env-example file and rename him to ".env".
+
+3. **Configure your .env file** (_Select your database name, host, username, password_). 
 
 3. **Migrate database and seeds** (_php artisan migrate:refresh --seed_).
 
