@@ -13,7 +13,7 @@ functionality rather than appearance.**
 
 2. **Rename .env-example file to ".env"**.
 
-3. **Configure your .env file** (_Select your database name, host, username, password_). 
+3. **Configure your .env file** (_Select your database name(DB_DATABASE), host(DB_HOST), username(DB_USERNAME), password(DB_PASSWORD=)_). 
 
 3. **Migrate database and seeds** (_php artisan migrate:refresh --seed_).
 
