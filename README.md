@@ -17,7 +17,9 @@ functionality rather than appearance.**
 
 3. **Migrate database and seeds** (run in your terminal _php artisan migrate:refresh --seed_).
 
-4. **Go to your local server or run in your terminal** _php artisan serve_ **and enjoy!**
+4. **Run in your terminal _php artisan key:generate_**.
+
+5. **Go to your local server or run in your terminal** _php artisan serve_ **and enjoy!**
 
 
 
